@@ -1,0 +1,11 @@
+# data-yolo.yaml
+# data-yolo.yaml
+
+train: data-yolo-split/train/images   # If using split data; otherwise, point to data-yolo/images if not splitting
+val: data-yolo-split/val/images       # If you get error, use full path like: C:\Users\merti\Documents\GitHub\challanges-app\yolo\data-yolo-split\val\images
+
+# Number of classes (in your case, 2: Car and Plate)
+nc: 2
+
+# Class names in order matching the labels (from classes.txt or your JSON metadata)
+names: ['Car', 'Plate']

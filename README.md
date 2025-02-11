@@ -53,9 +53,6 @@ python yolov5/train.py --img 640 --batch 16 --epochs 50 --data ../data-yolo.yaml
 
 ## Video Detection
 
-```bash
-python src/real_time.py --model_path models/best.pt
-```
 Press `q` to exit the webcam stream.
 
 ---

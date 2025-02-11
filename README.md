@@ -7,35 +7,11 @@ This project is an **Automatic License Plate Recognition (ALPR)** system that de
 - **License Plate Detection** using YOLOv5.
 - **OCR (Optical Character Recognition)** using Tesseract.
 - **Country Identification** based on regex patterns.
-- **Real-Time Detection** via webcam.
+- **Real-Time Detection** via webcam and YouTube video streams.
 - **Dataset Annotation & Conversion** from PascalVOC to YOLO format.
+- **Training YOLOv5 Model** with custom datasets.
+- **Evaluation of Detection Accuracy** across multiple countries.
 
----
-
-## Project Structure
-```
-ALPR-System/
-│── data/
-│   ├── images/
-│   │   ├── train/
-│   │   └── val/
-│   ├── annotations/
-│   │   ├── train/
-│   │   └── val/
-│── yolov5/ (Cloned YOLOv5 repository)
-│── models/
-│   ├── best.pt (Trained YOLOv5 model)
-│── src/
-│   ├── annotation.py (Convert XML to YOLO format)
-│   ├── detect.py (License plate detection)
-│   ├── ocr.py (OCR & text extraction)
-│   ├── country_identification.py (Identify country using regex)
-│   ├── alpr_pipeline.py (Full pipeline integration)
-│   ├── real_time.py (Real-time ALPR with webcam)
-│── requirements.txt
-│── license_plates.yaml (YOLO dataset configuration)
-│── README.md
-```
 
 ---
 
@@ -46,26 +22,16 @@ git clone https://github.com/yourusername/ALPR-System.git
 cd ALPR-System
 ```
 
-### 2. Install dependencies
-```bash
-pip install -r requirements.txt
-```
-
 ---
 
 ## Data Preparation
-### 1. Annotate Images with LabelImg
+### Annotate Images with Label-Studio or LabelImg
 ```bash
 pip install labelImg
 labelImg  # Launch tool
 ```
 - Draw bounding boxes around license plates.
-- Save annotations in `PascalVOC (.xml)` format.
-
-### 2. Convert Annotations to YOLO Format
-```bash
-python src/annotation.py
-```
+- Save annotations in YOLO format.
 
 ---
 
@@ -77,36 +43,16 @@ cd yolov5
 pip install -r requirements.txt
 ```
 
-### 2. Configure Dataset
-Modify `license_plates.yaml`:
-```yaml
-path: ../data
-train: images/train
-val: images/val
-names:
-  0: license_plate
-```
-
-### 3. Train the Model
+### 2. Train the Model
 ```bash
-python train.py --img 640 --batch 16 --epochs 50 --data ../license_plates.yaml --weights yolov5s.pt
+python yolov5/train.py --img 640 --batch 16 --epochs 50 --data ../data-yolo.yaml --weights yolov5s.pt
 ```
-- Trained weights are saved in `runs/train/exp/weights/best.pt`.
+- Trained weights are saved in `yolov5/runs/train/exp/weights/best.pt`.
 
 ---
 
-## License Plate Detection & OCR
-### 1. Detect License Plates in an Image
-```bash
-python src/detect.py --image_path test_image.jpg --model_path models/best.pt
-```
+## Video Detection
 
-### 2. Full ALPR Pipeline
-```bash
-python src/alpr_pipeline.py --image_path test_image.jpg --model_path models/best.pt
-```
-
-### 3. Real-Time ALPR
 ```bash
 python src/real_time.py --model_path models/best.pt
 ```
@@ -115,7 +61,10 @@ Press `q` to exit the webcam stream.
 ---
 
 ## Improvements & Future Work
-- **Integrate EasyOCR** for better character recognition.
+- **Newer version of YOLO or trying other libraries** can increase accuracy of license plate labelling.
+- **More images can be provided** for better plate recognition among different environments.
+- **Different Filters** for better character recognition.
+- **Tried EasyOCR, didnt work but maybe different scenarios** for better character recognition.
 - **Improve post-processing** to reduce OCR errors.
 - **Support multiple license plate formats** for different countries.
 - **Train a custom OCR model** for improved accuracy.
@@ -124,12 +73,14 @@ Press `q` to exit the webcam stream.
 
 ## Requirements
 ```bash
-# Install dependencies
+# DO NOT USE EasyOCR with Tesseract at the same environment!
 torch>=1.10.0
 torchvision>=0.11.1
 opencv-python>=4.5.4
 pytesseract>=0.3.8
 numpy>=1.21.4
+yt_dlp
+pafy
 ```
 
 ---
